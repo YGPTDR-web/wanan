@@ -7,6 +7,7 @@
   const game = $('game');
   const endingScreen = $('ending');
   const stage = $('stage');
+  const dialogueBox = document.querySelector('.dialogue-box'); // 获取对话框
   const narration = $('narration');
   const speakerEl = $('speaker');
   const textEl = $('dialogueText');
@@ -19,6 +20,18 @@
   let typingTimer = null;
   let isTyping = false;
   let fullText = '';
+  let pendingChoices = null;
+
+  // ---- 安全的本地存储封装 (修复 Via 浏览器报错问题) ----
+  function saveProgress(id) {
+    try { localStorage.setItem(STORAGE_KEY, id); } catch(e) {}
+  }
+  function loadProgress() {
+    try { return localStorage.getItem(STORAGE_KEY); } catch(e) { return null; }
+  }
+  function clearProgress() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  }
 
   // ---- 花瓣 ----
   function spawnPetals(){
@@ -50,7 +63,6 @@
     const speed = 38;
     typingTimer = setInterval(()=>{
       i++;
-      // 处理换行
       textEl.innerHTML = text.slice(0,i).replace(/\n/g,'<br>') + '<span class="caret"></span>';
       if(i >= text.length){
         clearInterval(typingTimer);
@@ -77,7 +89,6 @@
 
     if(node.chapter){
       chapterName.textContent = node.chapter;
-      // 章节切换时淡入旁白
     }
 
     // 旁白
@@ -85,20 +96,11 @@
       speakerEl.textContent = '';
       choicesEl.classList.add('hidden');
       textEl.innerHTML = '';
-      // 用上方手写体显示旁白，对话框空
       narration.textContent = node.text;
       narration.classList.add('show');
-      // 对话框显示"——"
-      speakerEl.textContent = '';
       textEl.innerHTML = '<span style="color:var(--ink-soft);font-style:italic;">……</span>';
       clickHint.classList.remove('hidden');
-      // 点击进入下一节点
-      const handler = ()=>{
-        stage.removeEventListener('click', stageHandler);
-        // 实际上我们用全局 click 处理
-      };
-      // 简化：直接让 clickHint 处理
-      setupAdvance(node);
+      saveProgress(id);
       return;
     }
 
@@ -106,7 +108,7 @@
     if(node.type === 'ending'){
       $('endingTitle').textContent = node.title;
       $('endingText').textContent = node.text;
-      localStorage.removeItem(STORAGE_KEY);
+      clearProgress();
       setTimeout(()=>show(endingScreen), 1200);
       return;
     }
@@ -122,18 +124,17 @@
     } else {
       speakerEl.style.color = 'var(--ink-soft)';
     }
-    typeText(node.text);
-    // 储存进度
-    localStorage.setItem(STORAGE_KEY, id);
-    // 选项
+    
+    saveProgress(id);
+    
     if(node.choices){
       pendingChoices = node.choices;
     } else {
       pendingChoices = null;
     }
+    
+    typeText(node.text);
   }
-
-  let pendingChoices = null;
 
   function afterNodeRendered(){
     if(pendingChoices && pendingChoices.length){
@@ -143,7 +144,7 @@
         b.className = 'choice';
         b.textContent = c.text;
         b.addEventListener('click', (e)=>{
-          e.stopPropagation();
+          e.stopPropagation(); // 防止触发外层推进事件
           goTo(c.next);
         });
         choicesEl.appendChild(b);
@@ -156,21 +157,12 @@
     }
   }
 
-  // 旁白节点的推进
-  function setupAdvance(node){
-    // 用 clickHint + stage click 触发
-    pendingNext = node.next;
-  }
-  let pendingNext = null;
-
-  // ---- 全局点击推进 ----
-  // 旁白节点：点击任意处进入 next
-  // 对话节点：点击 stage 推进（若无选项）
-  stage.addEventListener('click', ()=>{
+  // ---- 全局点击推进 (修复点击对话框无反应问题) ----
+  function advanceHandler(e) {
     const node = STORY[currentNode];
     if(!node) return;
 
-    // 正在打字 → 跳过
+    // 正在打字 → 跳过打字
     if(skipTyping()) return;
 
     // 旁白
@@ -182,22 +174,28 @@
       return;
     }
 
-    // 对话且无选项
+    // 对话且无选项 → 进入下一句
     if(node.type === 'dialogue' && !node.choices){
       if(node.next) goTo(node.next);
     }
-  });
+  }
+
+  // 给舞台和对话框都绑定点击事件
+  stage.addEventListener('click', advanceHandler);
+  if(dialogueBox) {
+    dialogueBox.addEventListener('click', advanceHandler);
+  }
 
   // ---- 启动 ----
   $('btnStart').addEventListener('click', ()=>{
-    localStorage.removeItem(STORAGE_KEY);
+    clearProgress();
     show(game);
     goTo('start');
     refreshContinueBtn();
   });
 
   $('btnContinue').addEventListener('click', ()=>{
-    const save = localStorage.getItem(STORAGE_KEY);
+    const save = loadProgress();
     if(save && STORY[save]){
       show(game);
       goTo(save);
@@ -206,20 +204,20 @@
 
   $('btnRestart').addEventListener('click', ()=>{
     if(confirm('确定要重新开始吗？当前进度会丢失。')){
-      localStorage.removeItem(STORAGE_KEY);
+      clearProgress();
       goTo('start');
       refreshContinueBtn();
     }
   });
 
   $('btnReplay').addEventListener('click', ()=>{
-    localStorage.removeItem(STORAGE_KEY);
+    clearProgress();
     show(cover);
     refreshContinueBtn();
   });
 
   function refreshContinueBtn(){
-    const save = localStorage.getItem(STORAGE_KEY);
+    const save = loadProgress();
     const btn = $('btnContinue');
     if(save && STORY[save] && save !== 'start'){
       btn.classList.remove('hidden');
@@ -237,13 +235,12 @@
   if(intro){
     setTimeout(() => {
       intro.classList.add('fade-out');
-      // 动画结束后隐藏 intro，显示封面
       setTimeout(() => {
         intro.classList.remove('active');
         document.getElementById('cover').classList.add('active');
       }, 1200);
-    }, 3500); // 停留 3.5 秒后开始淡出
+    }, 3500);
   } else {
     document.getElementById('cover').classList.add('active');
   }
-})();  // <--- 就是这行！千万不能漏掉
+})();
