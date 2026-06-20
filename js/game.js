@@ -228,7 +228,7 @@
     }
   }
 
-    // 初始化
+  // 初始化
   spawnPetals();
   refreshContinueBtn();
 
@@ -246,4 +246,4 @@
   } else {
     document.getElementById('cover').classList.add('active');
   }
-
+})();  // <--- 就是这行！千万不能漏掉
