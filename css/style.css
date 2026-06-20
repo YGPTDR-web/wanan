@@ -33,6 +33,41 @@ body {
 }
 .screen.active { display: flex; opacity: 1; }
 
+/* ---------- 开场动画 ---------- */
+#intro {
+    background: #1a1a1a;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+}
+.intro-text {
+    font-family: "Ma Shan Zheng", cursive;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: #fff;
+    letter-spacing: 6px;
+    text-align: center;
+}
+.intro-text .intro-caret {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: #fff;
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: introBlink 1s steps(2) infinite;
+}
+@keyframes introBlink { 50% { opacity: 0; } }
+.intro-hint {
+    position: absolute;
+    bottom: 15%;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.intro-hint.show { opacity: 1; }
+
 /* ---------- 封面 ---------- */
 #cover {
     align-items: center; justify-content: center;
@@ -55,13 +90,6 @@ body {
 .cover-desc {
     margin: 1.4rem auto 2.4rem;
     color: var(--ink-soft); line-height: 2; font-size: 1.05rem;
-}
-.cover-desc em {
-    font-style: normal;
-    font-family: "Long Cang", cursive;
-    color: var(--rose-deep);
-    font-size: 1.2rem;
-    letter-spacing: 2px;
 }
 .cover-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 .btn-start {
@@ -98,6 +126,7 @@ body {
 .chapter-name {
     font-family: "Ma Shan Zheng", cursive;
     color: var(--rose-deep); letter-spacing: 3px; font-size: 1.1rem;
+    transition: opacity 0.3s ease;
 }
 .btn-restart {
     background: transparent; border: none; font-size: 1.2rem;
@@ -140,6 +169,36 @@ body {
     pointer-events: none;
 }
 .narration.show { opacity: .92; }
+
+/* ---------- 章节过渡 ---------- */
+.chapter-transition {
+    position: absolute;
+    inset: 0;
+    background: rgba(247, 241, 232, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+    transition: opacity 0.6s ease;
+}
+.chapter-transition.show {
+    opacity: 1;
+}
+.chapter-transition-text {
+    font-family: "Long Cang", cursive;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--rose-deep);
+    letter-spacing: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.8s ease;
+}
+.chapter-transition.show .chapter-transition-text {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 /* ---------- 对话框 ---------- */
 .dialogue-box {
