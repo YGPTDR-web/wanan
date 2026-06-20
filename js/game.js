@@ -228,7 +228,22 @@
     }
   }
 
-  // 初始化
+    // 初始化
   spawnPetals();
   refreshContinueBtn();
-})();
+
+  // 过场动画控制
+  const intro = document.getElementById('intro');
+  if(intro){
+    setTimeout(() => {
+      intro.classList.add('fade-out');
+      // 动画结束后隐藏 intro，显示封面
+      setTimeout(() => {
+        intro.classList.remove('active');
+        document.getElementById('cover').classList.add('active');
+      }, 1200);
+    }, 3500); // 停留 3.5 秒后开始淡出
+  } else {
+    document.getElementById('cover').classList.add('active');
+  }
+
