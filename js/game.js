@@ -7,7 +7,6 @@
   const game = $('game');
   const endingScreen = $('ending');
   const stage = $('stage');
-  const dialogueBox = document.querySelector('.dialogue-box'); // 获取对话框
   const narration = $('narration');
   const speakerEl = $('speaker');
   const textEl = $('dialogueText');
@@ -22,18 +21,12 @@
   let fullText = '';
   let pendingChoices = null;
 
-  // ---- 安全的本地存储封装 (修复 Via 浏览器报错问题) ----
-  function saveProgress(id) {
-    try { localStorage.setItem(STORAGE_KEY, id); } catch(e) {}
-  }
-  function loadProgress() {
-    try { return localStorage.getItem(STORAGE_KEY); } catch(e) { return null; }
-  }
-  function clearProgress() {
-    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-  }
+  // ---- 安全的本地存储 (防止 Via 等浏览器报错) ----
+  function saveProgress(id) { try { localStorage.setItem(STORAGE_KEY, id); } catch(e) {} }
+  function loadProgress() { try { return localStorage.getItem(STORAGE_KEY); } catch(e) { return null; } }
+  function clearProgress() { try { localStorage.removeItem(STORAGE_KEY); } catch(e) {} }
 
-  // ---- 花瓣 ----
+  // ---- 花瓣特效 ----
   function spawnPetals(){
     for(let i=0;i<14;i++){
       const p = document.createElement('div');
@@ -46,14 +39,14 @@
     }
   }
 
-  // ---- 切换屏幕 ----
+  // ---- 屏幕切换 ----
   function show(screen){
     [cover,game,endingScreen].forEach(s=>s.classList.remove('active'));
     screen.classList.add('active');
   }
 
-  // ---- 打字机 ----
-  function typeText(text, done){
+  // ---- 打字机效果 ----
+  function typeText(text){
     fullText = text;
     textEl.innerHTML = '';
     isTyping = true;
@@ -72,6 +65,8 @@
       }
     }, speed);
   }
+
+  // 跳过打字机效果
   function skipTyping(){
     if(!isTyping) return false;
     clearInterval(typingTimer);
@@ -81,15 +76,13 @@
     return true;
   }
 
-  // ---- 节点渲染 ----
+  // ---- 剧情节点处理 ----
   function goTo(id){
     const node = STORY[id];
     if(!node){ console.error('missing node', id); return; }
     currentNode = id;
 
-    if(node.chapter){
-      chapterName.textContent = node.chapter;
-    }
+    if(node.chapter) chapterName.textContent = node.chapter;
 
     // 旁白
     if(node.type === 'narration'){
@@ -98,6 +91,7 @@
       textEl.innerHTML = '';
       narration.textContent = node.text;
       narration.classList.add('show');
+      // 底部显示省略号，提示当前是旁白
       textEl.innerHTML = '<span style="color:var(--ink-soft);font-style:italic;">……</span>';
       clickHint.classList.remove('hidden');
       saveProgress(id);
@@ -117,25 +111,16 @@
     narration.classList.remove('show');
     narration.textContent = '';
     speakerEl.textContent = node.speaker || '';
-    if(node.speaker === '林夏'){
-      speakerEl.style.color = 'var(--rose-deep)';
-    } else if(node.speaker === '你'){
-      speakerEl.style.color = 'var(--ink)';
-    } else {
-      speakerEl.style.color = 'var(--ink-soft)';
-    }
+    if(node.speaker === '林夏') speakerEl.style.color = 'var(--rose-deep)';
+    else if(node.speaker === '你') speakerEl.style.color = 'var(--ink)';
+    else speakerEl.style.color = 'var(--ink-soft)';
     
     saveProgress(id);
-    
-    if(node.choices){
-      pendingChoices = node.choices;
-    } else {
-      pendingChoices = null;
-    }
-    
+    pendingChoices = node.choices || null;
     typeText(node.text);
   }
 
+  // 节点渲染完毕后的 UI 更新
   function afterNodeRendered(){
     if(pendingChoices && pendingChoices.length){
       choicesEl.innerHTML = '';
@@ -144,7 +129,7 @@
         b.className = 'choice';
         b.textContent = c.text;
         b.addEventListener('click', (e)=>{
-          e.stopPropagation(); // 防止触发外层推进事件
+          e.stopPropagation(); // 阻止冒泡，防止触发外层推进事件
           goTo(c.next);
         });
         choicesEl.appendChild(b);
@@ -157,36 +142,40 @@
     }
   }
 
-  // ---- 全局点击推进 (修复点击对话框无反应问题) ----
-  function advanceHandler(e) {
+  // ---- 核心点击推进逻辑 ----
+  function advance(e) {
+    // 如果点的是选项按钮，直接交由按钮自己的事件处理
+    if(e.target.classList.contains('choice')) return;
+
     const node = STORY[currentNode];
     if(!node) return;
 
-    // 正在打字 → 跳过打字
-    if(skipTyping()) return;
-
-    // 旁白
-    if(node.type === 'narration'){
-      if(node.next){
-        narration.classList.remove('show');
-        goTo(node.next);
-      }
+    // 如果正在打字，点击立刻显示全文
+    if(isTyping){
+      skipTyping();
       return;
     }
 
-    // 对话且无选项 → 进入下一句
-    if(node.type === 'dialogue' && !node.choices){
-      if(node.next) goTo(node.next);
+    // 如果有选项，点击空白处不推进，必须点选项
+    if(pendingChoices) return;
+
+    // 推进旁白
+    if(node.type === 'narration' && node.next){
+      narration.classList.remove('show');
+      goTo(node.next);
+      return;
+    }
+
+    // 推进对话
+    if(node.type === 'dialogue' && node.next){
+      goTo(node.next);
     }
   }
 
-  // 给舞台和对话框都绑定点击事件
-  stage.addEventListener('click', advanceHandler);
-  if(dialogueBox) {
-    dialogueBox.addEventListener('click', advanceHandler);
-  }
+  // 将点击事件绑定到整个游戏区域，解决上下区域点击问题
+  game.addEventListener('click', advance);
 
-  // ---- 启动 ----
+  // ---- 按钮事件 ----
   $('btnStart').addEventListener('click', ()=>{
     clearProgress();
     show(game);
@@ -219,18 +208,14 @@
   function refreshContinueBtn(){
     const save = loadProgress();
     const btn = $('btnContinue');
-    if(save && STORY[save] && save !== 'start'){
-      btn.classList.remove('hidden');
-    } else {
-      btn.classList.add('hidden');
-    }
+    if(save && STORY[save] && save !== 'start') btn.classList.remove('hidden');
+    else btn.classList.add('hidden');
   }
 
-  // 初始化
+  // ---- 初始化 ----
   spawnPetals();
   refreshContinueBtn();
 
-  // 过场动画控制
   const intro = document.getElementById('intro');
   if(intro){
     setTimeout(() => {
