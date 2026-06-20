@@ -1,12 +1,21 @@
 (function(){
-  // 7. 依赖检查
-  if(!window.STORY) {
+  // 智能获取 STORY 对象，兼容 const/let/var 以及 window.STORY 等各种写法
+  let STORY_DATA;
+  try {
+    // 如果是通过 const/let/var 声明的全局变量，可以直接访问
+    STORY_DATA = STORY; 
+  } catch(e) {
+    // 如果报错说明不是直接声明的，尝试从 window 上获取
+    STORY_DATA = window.STORY;
+  }
+
+  if(!STORY_DATA) {
     console.error('缺少剧情数据，无法启动游戏');
     document.body.innerHTML = '<div style="text-align:center;padding:50px;color:#555;">剧本加载失败，请检查 story.js 文件。</div>';
     return;
   }
 
-  const STORY = window.STORY;
+  const STORY = STORY_DATA;
   const STORAGE_KEY = 'robin_bookshop_save';
 
   const $ = id => document.getElementById(id);
@@ -27,33 +36,22 @@
   let isTyping = false;
   let fullText = '';
   let pendingChoices = null;
-  let transitioning = false; // 5. 增加点击锁，防止快速连点跳句
-  let spawnedPetals = [];    // 6. 记录花瓣节点，方便清理
+  let transitioning = false; 
+  let spawnedPetals = [];    
 
-  // 10. 本地存储异常处理优化
   function saveProgress(id) {
-    try { localStorage.setItem(STORAGE_KEY, id); } catch(e) {
-      console.warn('localStorage 存储失败，进度无法保存', e);
-    }
+    try { localStorage.setItem(STORAGE_KEY, id); } catch(e) {}
   }
   function loadProgress() {
-    try { return localStorage.getItem(STORAGE_KEY); } catch(e) {
-      console.warn('localStorage 读取失败', e);
-      return null;
-    }
+    try { return localStorage.getItem(STORAGE_KEY); } catch(e) { return null; }
   }
   function clearProgress() {
-    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {
-      console.warn('localStorage 清除失败', e);
-    }
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
   }
 
-  // ---- 花瓣特效 ----
   function spawnPetals(){
-    // 清理旧花瓣
     petalsEl.innerHTML = '';
     spawnedPetals = [];
-    
     for(let i=0;i<14;i++){
       const p = document.createElement('div');
       p.className='petal';
@@ -66,19 +64,16 @@
     }
   }
 
-  // ---- 屏幕切换 ----
   function show(screen){
     [cover,game,endingScreen].forEach(s=>s.classList.remove('active'));
     screen.classList.add('active');
-    // 6. 返回封面或结局时暂停/清理花瓣动画
     if(screen !== game) {
       petalsEl.innerHTML = '';
     }
   }
 
-  // ---- 打字机效果 ----
   function typeText(text){
-    fullText = text || ''; // 8. 统一更新 fullText
+    fullText = text || ''; 
     if(!text) {
       textEl.innerHTML = '';
       afterNodeRendered();
@@ -96,7 +91,6 @@
     
     typingTimer = setInterval(()=>{
       i++;
-      // 9. 优化光标，确保只在打字过程中显示
       textEl.innerHTML = text.slice(0,i).replace(/\n/g,'<br>') + '<span class="caret"></span>';
       if(i >= text.length){
         clearInterval(typingTimer);
@@ -111,13 +105,11 @@
     if(!isTyping) return false;
     clearInterval(typingTimer);
     isTyping = false;
-    // 9. 清理光标，直接赋值纯文本
     textEl.innerHTML = fullText.replace(/\n/g,'<br>');
     afterNodeRendered();
     return true;
   }
 
-  // ---- 剧情节点处理 ----
   function goTo(id){
     const node = STORY[id];
     if(!node){ 
@@ -126,14 +118,12 @@
     }
     currentNode = id;
 
-    // 3. 章节名重置
     if(node.chapter) {
       chapterName.textContent = node.chapter;
     } else {
       chapterName.textContent = '';
     }
 
-    // 结局处理
     if(node.type === 'ending'){
       $('endingTitle').textContent = node.title;
       $('endingText').textContent = node.text;
@@ -142,12 +132,10 @@
       return;
     }
 
-    // 隐藏中间手写体旁白层
     narration.classList.remove('show');
     narration.textContent = '';
 
-    // 2. 说话人颜色重置与设置
-    speakerEl.style.color = ''; // 先重置
+    speakerEl.style.color = ''; 
     if(node.type === 'narration') {
       speakerEl.textContent = ''; 
     } else {
@@ -163,9 +151,8 @@
     typeText(node.text);
   }
 
-  // 节点渲染完毕后的 UI 更新
   function afterNodeRendered(){
-    transitioning = false; // 解除锁定
+    transitioning = false; 
     
     if(pendingChoices && pendingChoices.length){
       choicesEl.innerHTML = '';
@@ -181,7 +168,6 @@
       choicesEl.classList.add('hidden');
       clickHint.classList.remove('hidden');
       
-      // 4. 节点兜底：既无 next 也无 choices，且非结局，视为结束
       const node = STORY[currentNode];
       if(node && !node.next && !node.choices) {
         clickHint.textContent = '（剧情结束，点击重新开始）';
@@ -198,14 +184,11 @@
     refreshContinueBtn();
   }
 
-  // ---- 核心点击推进逻辑 ----
   document.addEventListener('click', function(e){
     if(!game.classList.contains('active')) return;
-    if(transitioning) return; // 5. 过渡期间屏蔽点击
+    if(transitioning) return; 
     
-    // 1. 使用 closest 判断选项，更稳健
     if(e.target.closest('.choice')) {
-      // 手动触发选项跳转
       const btn = e.target.closest('.choice');
       const index = Array.from(choicesEl.children).indexOf(btn);
       if(index !== -1 && pendingChoices[index]) {
@@ -217,27 +200,23 @@
       return;
     }
     
-    // 如果正在打字，点击立刻显示全文
     if(isTyping){
       skipTyping();
       return;
     }
     
-    // 如果当前有选项等待选择，必须点选项，空白处不推进
     if(pendingChoices) return;
     
-    // 推进到下一句
     const node = STORY[currentNode];
     if(node && node.next){
-      transitioning = true; // 5. 上锁
+      transitioning = true; 
       goTo(node.next);
     }
   });
 
-  // ---- 按钮事件 ----
   $('btnStart').addEventListener('click', ()=>{
     clearProgress();
-    spawnPetals(); // 重新生成花瓣
+    spawnPetals(); 
     show(game);
     transitioning = true;
     goTo('start');
@@ -277,7 +256,6 @@
     else btn.classList.add('hidden');
   }
 
-  // ---- 初始化 ----
   refreshContinueBtn();
 
   const intro = document.getElementById('intro');
