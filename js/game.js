@@ -169,6 +169,9 @@
         if (node.type === 'ending') {
             $('endingTitle').textContent = node.title;
             $('endingText').textContent = node.text;
+            if (node.gift) {
+                $('endingGift').textContent = node.gift;
+            }
             clearSave();
             setTimeout(() => showScreen(endingScreen), 1000);
             return;
