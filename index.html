@@ -1,99 +1,66 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>晚安的情书</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700;900&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知更鸟书店的春天 · 一场漫长的告白</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div id="app">
+        <!-- 标题封面 -->
+        <section id="cover" class="screen active">
+            <div class="cover-inner">
+                <p class="cover-sub">一部互动轻小说</p>
+                <h1 class="cover-title">知更鸟书店的春天</h1>
+                <p class="cover-desc">
+                    关于一个总是踮脚够书的女孩，<br>
+                    和一场她藏了很久的告白。<br><br>
+                    <em>"这是一封给晚安的情书"</em>
+                </p>
+                <div class="cover-buttons">
+                    <button class="btn-start" id="btnStart">翻开第一页</button>
+                    <button class="btn-continue hidden" id="btnContinue">继续上次阅读</button>
+                </div>
+                <p class="cover-foot">建议佩戴耳机 · 全程约 25 分钟</p>
+            </div>
+        </section>
 
-  <!-- 开场过场 -->
-  <div id="intro-screen" class="screen active">
-    <div class="intro-bg">
-      <div class="moon"></div>
-      <div class="stars"></div>
+        <!-- 游戏主界面 -->
+        <section id="game" class="screen">
+            <header class="topbar">
+                <span class="chapter-name" id="chapterName">序章</span>
+                <button class="btn-restart" id="btnRestart" title="重新开始">↺</button>
+            </header>
+
+            <main class="stage" id="stage">
+                <div class="bg-vignette"></div>
+                <div class="petals" id="petals"></div>
+                <div class="narration" id="narration"></div>
+            </main>
+
+            <footer class="dialogue-box">
+                <div class="speaker" id="speaker"></div>
+                <div class="text" id="dialogueText"></div>
+                <div class="choices" id="choices"></div>
+                <div class="click-hint" id="clickHint">▼ 点击继续</div>
+            </footer>
+        </section>
+
+        <!-- 结局画面 -->
+        <section id="ending" class="screen">
+            <div class="ending-inner">
+                <h2 id="endingTitle"></h2>
+                <p id="endingText"></p>
+                <button class="btn-start" id="btnReplay">再读一遍</button>
+            </div>
+        </section>
     </div>
-    <div class="intro-content">
-      <p class="intro-line intro-line-1">这是一封送给晚安的情书</p>
-      <p class="intro-line intro-line-2">—— 关于一个女孩，偷偷喜欢一个人的全部故事</p>
-      <button class="intro-btn" id="start-btn">
-        <span>翻开这封信</span>
-      </button>
-    </div>
-  </div>
 
-  <!-- 主游戏界面 -->
-  <div id="game-screen" class="screen">
-    <div class="bg-layer">
-      <div class="bg-gradient"></div>
-      <div class="petals" id="petals"></div>
-      <div class="vignette"></div>
-    </div>
-
-    <div class="game-container">
-      <header class="top-bar">
-        <div class="chapter-info">
-          <span class="chapter-num"></span>
-          <span class="chapter-title"></span>
-        </div>
-        <button class="menu-btn" id="restart-btn" title="重新开始">↻</button>
-      </header>
-
-      <main class="stage">
-        <!-- 章节标题覆盖层 -->
-        <div class="chapter-overlay" id="chapter-overlay">
-          <div class="chapter-overlay-num"></div>
-          <div class="chapter-overlay-title"></div>
-          <div class="chapter-overlay-hint">点击继续</div>
-        </div>
-
-        <!-- 叙述区 -->
-        <div class="narrative-area" id="narrative-area"></div>
-
-        <!-- 对话框 -->
-        <div class="dialogue-box" id="dialogue-box">
-          <div class="speaker-name" id="speaker-name"></div>
-          <div class="dialogue-text" id="dialogue-text"></div>
-        </div>
-
-        <!-- 纸条特殊样式 -->
-        <div class="note-box" id="note-box">
-          <div class="note-paper">
-            <div class="note-text" id="note-text"></div>
-            <div class="note-sign" id="note-sign"></div>
-          </div>
-        </div>
-
-        <!-- 消息气泡 -->
-        <div class="message-area" id="message-area"></div>
-
-        <!-- 选项区 -->
-        <div class="choices-area" id="choices-area"></div>
-
-        <!-- 继续提示 -->
-        <div class="continue-hint" id="continue-hint">点击任意处继续 ▾</div>
-      </main>
-    </div>
-  </div>
-
-  <!-- 结局界面 -->
-  <div id="ending-screen" class="screen">
-    <div class="ending-bg">
-      <div class="petals" id="ending-petals"></div>
-    </div>
-    <div class="ending-content">
-      <div class="ending-title"></div>
-      <div class="ending-subtitle"></div>
-      <div class="ending-quote"></div>
-      <button class="ending-btn" id="replay-btn">再读一遍这封信</button>
-    </div>
-  </div>
-
-  <script src="js/story.js"></script>
-  <script src="js/main.js"></script>
+    <script src="js/story.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
