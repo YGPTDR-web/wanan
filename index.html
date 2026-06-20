@@ -11,15 +11,20 @@
 </head>
 <body>
     <div id="app">
+        <!-- 开场动画层 -->
+        <section id="intro" class="screen active">
+            <div class="intro-text" id="introText"></div>
+            <div class="intro-hint" id="introHint">[ 点击屏幕继续 ]</div>
+        </section>
+
         <!-- 标题封面 -->
-        <section id="cover" class="screen active">
+        <section id="cover" class="screen">
             <div class="cover-inner">
                 <p class="cover-sub">一部互动轻小说</p>
                 <h1 class="cover-title">知更鸟书店的春天</h1>
                 <p class="cover-desc">
                     关于一个总是踮脚够书的女孩，<br>
-                    和一场她藏了很久的告白。<br><br>
-                    <em>"这是一封给晚安的情书"</em>
+                    和一场她藏了很久的告白。
                 </p>
                 <div class="cover-buttons">
                     <button class="btn-start" id="btnStart">翻开第一页</button>
@@ -40,6 +45,11 @@
                 <div class="bg-vignette"></div>
                 <div class="petals" id="petals"></div>
                 <div class="narration" id="narration"></div>
+                
+                <!-- 章节过渡遮罩 -->
+                <div class="chapter-transition" id="chapterTransition">
+                    <div class="chapter-transition-text" id="chapterTransitionText"></div>
+                </div>
             </main>
 
             <footer class="dialogue-box">
