@@ -6,9 +6,6 @@
 
     // DOM 元素缓存
     const $ = (id) => document.getElementById(id);
-    const intro = $('intro');
-    const introText = $('introText');
-    const introHint = $('introHint');
     const cover = $('cover');
     const gameScreen = $('game');
     const endingScreen = $('ending');
@@ -29,46 +26,6 @@
     let typingTimer = null;
     let fullText = '';
     let isTransitioning = false; // 防止过渡期间重复点击
-
-    // ================= 1. 开场动画 =================
-    let introTyped = false;
-    let introTimer = null;
-
-    function typeIntro() {
-        const text = "这是一封给晚安的情书";
-        let i = 0;
-        introText.innerHTML = '<span class="intro-caret"></span>';
-        
-        introTimer = setInterval(() => {
-            i++;
-            // 注意这里严格保留了（bushi
-            introText.innerHTML = text.slice(0, i) + '<span class="intro-caret"></span>';
-            
-            if (i >= text.length) {
-                clearInterval(introTimer);
-                introTyped = true;
-                introHint.classList.add('show');
-            }
-        }, 150);
-    }
-
-    intro.addEventListener('click', () => {
-        if (!introTyped) {
-            // 跳过打字动画
-            clearInterval(introTimer);
-            introText.innerHTML = "这是一封给晚安的情书<span class='intro-caret'></span>";
-            introTyped = true;
-            introHint.classList.add('show');
-        } else {
-            // 进入封面
-            intro.style.opacity = '0';
-            setTimeout(() => {
-                intro.classList.remove('active');
-                intro.style.display = 'none';
-                cover.classList.add('active');
-            }, 800);
-        }
-    });
 
     // ================= 2. 游戏逻辑 =================
     
@@ -320,8 +277,22 @@
         checkSave();
     });
 
-    // 启动
+    // ================= 初始化 =================
     spawnPetals();
-    typeIntro(); // 启动开场打字
     checkSave();
+
+    // 过场动画控制
+    const intro = document.getElementById('intro');
+    if(intro){
+        setTimeout(() => {
+            intro.classList.add('fade-out');
+            // 动画结束后隐藏 intro，显示封面
+            setTimeout(() => {
+                intro.classList.remove('active');
+                cover.classList.add('active');
+            }, 1200);
+        }, 3500); // 停留 3.5 秒后开始淡出
+    } else {
+        cover.classList.add('active');
+    }
 })();
