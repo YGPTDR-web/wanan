@@ -45,15 +45,22 @@
     screen.classList.add('active');
   }
 
-  // ---- 打字机效果 ----
+  // ---- 打字机效果 (核心) ----
   function typeText(text){
+    if(!text) {
+      afterNodeRendered();
+      return;
+    }
     fullText = text;
     textEl.innerHTML = '';
     isTyping = true;
     clickHint.classList.add('hidden');
+    choicesEl.classList.add('hidden');
+    
     let i = 0;
     clearInterval(typingTimer);
     const speed = 38;
+    
     typingTimer = setInterval(()=>{
       i++;
       textEl.innerHTML = text.slice(0,i).replace(/\n/g,'<br>') + '<span class="caret"></span>';
@@ -66,7 +73,7 @@
     }, speed);
   }
 
-  // 跳过打字机效果
+  // 瞬间显示全文
   function skipTyping(){
     if(!isTyping) return false;
     clearInterval(typingTimer);
@@ -84,21 +91,7 @@
 
     if(node.chapter) chapterName.textContent = node.chapter;
 
-    // 旁白
-    if(node.type === 'narration'){
-      speakerEl.textContent = '';
-      choicesEl.classList.add('hidden');
-      textEl.innerHTML = '';
-      narration.textContent = node.text;
-      narration.classList.add('show');
-      // 底部显示省略号，提示当前是旁白
-      textEl.innerHTML = '<span style="color:var(--ink-soft);font-style:italic;">……</span>';
-      clickHint.classList.remove('hidden');
-      saveProgress(id);
-      return;
-    }
-
-    // 结局
+    // 结局处理
     if(node.type === 'ending'){
       $('endingTitle').textContent = node.title;
       $('endingText').textContent = node.text;
@@ -107,16 +100,24 @@
       return;
     }
 
-    // 对话
+    // 隐藏中间的手写体旁白层
     narration.classList.remove('show');
     narration.textContent = '';
-    speakerEl.textContent = node.speaker || '';
-    if(node.speaker === '林夏') speakerEl.style.color = 'var(--rose-deep)';
-    else if(node.speaker === '你') speakerEl.style.color = 'var(--ink)';
-    else speakerEl.style.color = 'var(--ink-soft)';
+
+    // 设置说话人
+    if(node.type === 'narration') {
+      speakerEl.textContent = ''; // 旁白不显示说话人
+    } else {
+      speakerEl.textContent = node.speaker || '';
+      if(node.speaker === '林夏') speakerEl.style.color = 'var(--rose-deep)';
+      else if(node.speaker === '你') speakerEl.style.color = 'var(--ink)';
+      else speakerEl.style.color = 'var(--ink-soft)';
+    }
     
     saveProgress(id);
     pendingChoices = node.choices || null;
+    
+    // 统一在底部对话框打字
     typeText(node.text);
   }
 
@@ -128,8 +129,9 @@
         const b = document.createElement('button');
         b.className = 'choice';
         b.textContent = c.text;
+        // 阻止冒泡到 document
         b.addEventListener('click', (e)=>{
-          e.stopPropagation(); // 阻止冒泡，防止触发外层推进事件
+          e.stopPropagation();
           goTo(c.next);
         });
         choicesEl.appendChild(b);
@@ -142,38 +144,30 @@
     }
   }
 
-  // ---- 核心点击推进逻辑 ----
-  function advance(e) {
-    // 如果点的是选项按钮，直接交由按钮自己的事件处理
+  // ---- 核心点击推进逻辑 (彻底修复) ----
+  // 直接监听 document，确保任何位置点击都有效
+  document.addEventListener('click', function(e){
+    // 1. 只有在游戏界面才生效
+    if(!game.classList.contains('active')) return;
+    
+    // 2. 如果点击的是选项按钮，交由按钮自身处理
     if(e.target.classList.contains('choice')) return;
-
-    const node = STORY[currentNode];
-    if(!node) return;
-
-    // 如果正在打字，点击立刻显示全文
+    
+    // 3. 如果正在打字，点击立刻显示全文
     if(isTyping){
       skipTyping();
       return;
     }
-
-    // 如果有选项，点击空白处不推进，必须点选项
+    
+    // 4. 如果当前有选项等待选择，必须点选项，空白处不推进
     if(pendingChoices) return;
-
-    // 推进旁白
-    if(node.type === 'narration' && node.next){
-      narration.classList.remove('show');
-      goTo(node.next);
-      return;
-    }
-
-    // 推进对话
-    if(node.type === 'dialogue' && node.next){
+    
+    // 5. 推进到下一句
+    const node = STORY[currentNode];
+    if(node && node.next){
       goTo(node.next);
     }
-  }
-
-  // 将点击事件绑定到整个游戏区域，解决上下区域点击问题
-  game.addEventListener('click', advance);
+  });
 
   // ---- 按钮事件 ----
   $('btnStart').addEventListener('click', ()=>{
@@ -194,6 +188,7 @@
   $('btnRestart').addEventListener('click', ()=>{
     if(confirm('确定要重新开始吗？当前进度会丢失。')){
       clearProgress();
+      show(game);
       goTo('start');
       refreshContinueBtn();
     }
