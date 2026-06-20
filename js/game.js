@@ -6,6 +6,9 @@
 
     // DOM 元素缓存
     const $ = (id) => document.getElementById(id);
+    const intro = $('intro');
+    const introText = $('introText');
+    const introHint = $('introHint');
     const cover = $('cover');
     const gameScreen = $('game');
     const endingScreen = $('ending');
@@ -17,13 +20,58 @@
     const clickHint = $('clickHint');
     const chapterNameEl = $('chapterName');
     const petalsEl = $('petals');
+    const chapterTransition = $('chapterTransition');
+    const chapterTransitionText = $('chapterTransitionText');
 
     // 游戏状态
     let currentNodeId = null;
     let isTyping = false;
     let typingTimer = null;
     let fullText = '';
+    let isTransitioning = false; // 防止过渡期间重复点击
 
+    // ================= 1. 开场动画 =================
+    let introTyped = false;
+    let introTimer = null;
+
+    function typeIntro() {
+        const text = "这是一封给晚安的情书";
+        let i = 0;
+        introText.innerHTML = '<span class="intro-caret"></span>';
+        
+        introTimer = setInterval(() => {
+            i++;
+            // 注意这里严格保留了（bushi
+            introText.innerHTML = text.slice(0, i) + '<span class="intro-caret"></span>';
+            
+            if (i >= text.length) {
+                clearInterval(introTimer);
+                introTyped = true;
+                introHint.classList.add('show');
+            }
+        }, 150);
+    }
+
+    intro.addEventListener('click', () => {
+        if (!introTyped) {
+            // 跳过打字动画
+            clearInterval(introTimer);
+            introText.innerHTML = "这是一封给晚安的情书<span class='intro-caret'></span>";
+            introTyped = true;
+            introHint.classList.add('show');
+        } else {
+            // 进入封面
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.classList.remove('active');
+                intro.style.display = 'none';
+                cover.classList.add('active');
+            }, 800);
+        }
+    });
+
+    // ================= 2. 游戏逻辑 =================
+    
     // 初始化花瓣
     function spawnPetals() {
         for (let i = 0; i < 16; i++) {
@@ -55,7 +103,6 @@
         
         typingTimer = setInterval(() => {
             i++;
-            // 将换行符转换为 <br>
             const displayText = text.slice(0, i).replace(/\n/g, '<br>');
             textEl.innerHTML = displayText + '<span class="caret"></span>';
             
@@ -78,7 +125,7 @@
         return true;
     }
 
-    // 节点渲染完毕后的处理（显示选项或提示）
+    // 节点渲染完毕后的处理
     function nodeRenderedDone() {
         const node = STORY[currentNodeId];
         
@@ -93,6 +140,7 @@
             }
         }
         saveGame();
+        isTransitioning = false; // 渲染完成，解锁
     }
 
     // 渲染选项
@@ -102,23 +150,56 @@
             const btn = document.createElement('button');
             btn.className = 'choice';
             btn.textContent = choice.text;
-            // 使用 stopPropagation 防止触发 stage 的点击事件
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                goToNode(choice.next);
+                if (!isTransitioning) {
+                    goToNode(choice.next);
+                }
             });
             choicesEl.appendChild(btn);
         });
     }
 
+    // 章节过渡动画
+    function triggerChapterTransition(node, callback) {
+        isTransitioning = true;
+        chapterTransitionText.textContent = node.chapter;
+        chapterTransition.classList.add('show');
+        
+        // 淡入停留 1.2s 后执行回调渲染内容
+        setTimeout(() => {
+            callback();
+            // 渲染后稍微等一下再淡出遮罩
+            setTimeout(() => {
+                chapterTransition.classList.remove('show');
+            }, 200);
+        }, 1200);
+    }
+
     // 跳转到节点
     function goToNode(nodeId) {
+        if (isTransitioning) return; // 防止动画期间重复触发
+        
         const node = STORY[nodeId];
         if (!node) {
             console.error('找不到节点:', nodeId);
             return;
         }
 
+        // 如果是带有 chapter 属性的节点，且不是游戏刚启动的第一个节点
+        // 则触发低调的过渡动画
+        if (node.chapter && currentNodeId !== null) {
+            triggerChapterTransition(node, () => {
+                renderNode(nodeId);
+            });
+        } else {
+            renderNode(nodeId);
+        }
+    }
+
+    // 实际渲染节点内容
+    function renderNode(nodeId) {
+        const node = STORY[nodeId];
         currentNodeId = nodeId;
         choicesEl.innerHTML = ''; // 清空选项
         
@@ -171,6 +252,8 @@
             return;
         }
 
+        if (isTransitioning) return;
+
         const node = STORY[currentNodeId];
         if (!node) return;
 
@@ -179,7 +262,6 @@
 
         // 旁白或无选项对话：点击进入下一节点
         if (node.next) {
-            // 旁白点击时先淡出
             if (node.type === 'narration') {
                 narrationEl.classList.remove('show');
                 setTimeout(() => goToNode(node.next), 300);
@@ -240,5 +322,6 @@
 
     // 启动
     spawnPetals();
+    typeIntro(); // 启动开场打字
     checkSave();
 })();
