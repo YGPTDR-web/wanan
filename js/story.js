@@ -1,0 +1,553 @@
+// 剧情数据 —— 《知更鸟书店的春天》
+// 节点 id 规则：章_序号，分支用 a/b 后缀
+window.STORY = {
+
+  // ===== 序章 =====
+  start: {
+    chapter:"序章 · 一只知更鸟",
+    type:"narration",
+    text:"三月的风穿过老巷，把书店门口的风铃吹得叮叮当当。",
+    next:"p2"
+  },
+  p2:{type:"narration", text:"知更鸟书店开在城南第三条巷子的尽头，门口的木牌已经褪了色。", next:"p3"},
+  p3:{type:"narration", text:"你推门进去，铃铛响了一声。", next:"p4"},
+  p4:{type:"narration", text:"那是你第一次见到她。", next:"c1_1"},
+
+  // ===== 第一章：踮脚的女孩 =====
+  c1_1:{
+    chapter:"第一章 · 踮脚的女孩",
+    type:"narration",
+    text:"阳光斜斜地落在书架最高一层。一个穿米色毛衣的女孩正踮着脚，指尖努力地去够一本《博尔赫斯诗集》。",
+    next:"c1_2"
+  },
+  c1_2:{type:"narration", text:"她的脚跟离地了好几厘米，重心摇摇晃晃。", next:"c1_3"},
+  c1_3:{type:"narration", text:"——然后，她失去了平衡。", next:"c1_4"},
+  c1_4:{type:"narration", text:"你下意识伸手，扶住了她的手臂。书"啪"地掉在地上。", next:"c1_5"},
+  c1_5:{
+    type:"dialogue", speaker:"林夏",
+    text:"……！",
+    next:"c1_6"
+  },
+  c1_6:{type:"narration", text:"她回过头，看清了你。", next:"c1_7"},
+  c1_7:{type:"narration", text:"然后，她就那样愣住了，眼睛一眨不眨。", next:"c1_8"},
+  c1_8:{
+    type:"dialogue", speaker:"林夏",
+    text:"那个……谢、谢谢。",
+    next:"c1_9"
+  },
+  c1_9:{type:"narration", text:"她的耳朵尖，一点一点地红了。", next:"c1_choice"}
+  ,
+  c1_choice:{
+    type:"dialogue", speaker:"你",
+    text:"（书掉地上了，要怎么回应她？）",
+    choices:[
+      {text:"帮她把书捡起来，递给她", next:"c1_a1"},
+      {text:"轻声问：你还好吗？", next:"c1_b1"},
+      {text:"什么都没说，只是把书放回她手里", next:"c1_a1"}
+    ]
+  },
+  c1_a1:{type:"dialogue", speaker:"你", text:"书我帮你捡吧。", next:"c1_a2"},
+  c1_a2:{type:"narration", text:"你弯腰拾起那本诗集，封面有细细的烫金。", next:"c1_a3"},
+  c1_a3:{type:"dialogue", speaker:"林夏", text:"啊……嗯，谢谢，谢谢你。", next:"c1_after"},
+  c1_b1:{type:"dialogue", speaker:"你", text:"你还好吗？没扭到脚吧？", next:"c1_b2"},
+  c1_b2:{type:"dialogue", speaker:"林夏", text:"没、没有！我没事的，真的。", next:"c1_b3"},
+  c1_b3:{type:"narration", text:"她说着，悄悄把踮起来的那只脚收回去了——其实有点疼，但她不想让你知道。", next:"c1_after"},
+  c1_after:{type:"dialogue", speaker:"林夏", text:"你也……喜欢博尔赫斯吗？", next:"c1_10"},
+  c1_10:{type:"narration", text:"她说话的时候不敢看你的眼睛，目光落在你衬衫的第二颗扣子上。", next:"c1_choice2"},
+  c1_choice2:{
+    type:"dialogue", speaker:"你",
+    text:"（该怎么回答？）",
+    choices:[
+      {text:"喜欢，尤其是《关于天赐的诗》", next:"c1_c1"},
+      {text:"还好，我只是随便翻翻", next:"c1_d1"},
+      {text:"我喜欢的是小说，诗集不太懂", next:"c1_d1"}
+    ]
+  },
+  c1_c1:{type:"dialogue", speaker:"你", text:"喜欢。尤其是《关于天赐的诗》。", next:"c1_c2"},
+  c1_c2:{type:"dialogue", speaker:"林夏", text:"……我也是。", next:"c1_c3"},
+  c1_c3:{type:"narration", text:"她抬起头，飞快地看了你一眼，又赶紧低下。那一眼里有光。", next:"c1_after2"},
+  c1_d1:{type:"dialogue", speaker:"林夏", text:"啊……那、那也没关系。书这种东西，遇到就是缘分嘛。", next:"c1_after2"},
+  c1_after2:{type:"narration", text:"书店的老板在柜台后打了个盹。风铃又响了一次，没有人进来。", next:"c1_11"},
+  c1_11:{type:"dialogue", speaker:"林夏", text:"那个……我叫林夏。森林的林，夏天的夏。", next:"c1_12"},
+  c1_12:{type:"narration", text:"她说出自己的名字时，声音小得像怕惊扰了书架上的灰尘。", next:"c1_13"},
+  c1_13:{type:"dialogue", speaker:"林夏", text:"你、你也常来这家店吗？我之前好像……没见过你。", next:"c1_choice3"},
+  c1_choice3:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"第一次来，这家店挺有意思", next:"c1_e1"},
+      {text:"以后可能会常来", next:"c1_e2"},
+      {text:"路过看见的，就进来了", next:"c1_e1"}
+    ]
+  },
+  c1_e1:{type:"dialogue", speaker:"你", text:"第一次来。这家店挺有意思的。", next:"c1_e3"},
+  c1_e2:{type:"dialogue", speaker:"你", text:"以后可能会常来。", next:"c1_e4"},
+  c1_e4:{type:"dialogue", speaker:"林夏", text:"……诶？", next:"c1_e5"},
+  c1_e5:{type:"narration", text:"她的睫毛颤了一下，像是被这句话砸到了。", next:"c1_e3"},
+  c1_e3:{type:"dialogue", speaker:"林夏", text:"那、那很好啊。老板人很好的，书也便宜。", next:"c1_14"},
+  c1_14:{type:"narration", text:"她抱着那本诗集，往书架后退了半步，像是不知道手脚该往哪里放。", next:"c1_15"},
+  c1_15:{type:"dialogue", speaker:"林夏", text:"那……我先走了。", next:"c1_16"},
+  c1_16:{type:"narration", text:"她几乎是逃一样地往柜台跑，跑了两步又停下来，回头看你。", next:"c1_17"},
+  c1_17:{type:"dialogue", speaker:"林夏", text:"……再见。", next:"c1_18"},
+  c1_18:{type:"narration", text:"她的声音轻得像羽毛。然后她红着耳朵，消失在书架后面。", next:"c1_19"},
+  c1_19:{type:"narration", text:"你站在原地，忽然觉得，今天的阳光有点不一样。", next:"c2_1"},
+
+  // ===== 第二章：雨中的便利店 =====
+  c2_1:{
+    chapter:"第二章 · 雨中的便利店",
+    type:"narration",
+    text:"一周后的傍晚，城市毫无预兆地下起了暴雨。",
+    next:"c2_2"
+  },
+  c2_2:{type:"narration", text:"你没带伞，跑进街角的便利店避雨，浑身湿了大半。", next:"c2_3"},
+  c2_3:{type:"narration", text:"门口的风铃"叮铃"一声——然后你听见了一个熟悉的声音。", next:"c2_4"},
+  c2_4:{type:"dialogue", speaker:"林夏", text:"啊……！", next:"c2_5"},
+  c2_5:{type:"narration", text:"她正站在收银台后面，穿着便利店的围裙。看见你的瞬间，手里的扫码枪差点掉了。", next:"c2_6"},
+  c2_6:{type:"dialogue", speaker:"林夏", text:"是、是你……书店那个……", next:"c2_7"},
+  c2_7:{type:"narration", text:"她绕出柜台，又像想起来什么，退回去拿了一条干毛巾。", next:"c2_8"},
+  c2_8:{type:"dialogue", speaker:"林夏", text:"你浑身都湿了，会感冒的。给、给你。", next:"c2_choice"},
+  c2_choice:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"谢谢，你在这里打工啊？", next:"c2_a1"},
+      {text:"你记得我？", next:"c2_b1"},
+      {text:"接过毛巾：太谢谢了", next:"c2_a1"}
+    ]
+  },
+  c2_a1:{type:"dialogue", speaker:"你", text:"谢谢。你在这里打工啊？", next:"c2_a2"},
+  c2_a2:{type:"dialogue", speaker:"林夏", text:"嗯……周二、周四、周末。出版社工资不太够付房租，所以……", next:"c2_after"},
+  c2_b1:{type:"dialogue", speaker:"你", text:"你记得我？", next:"c2_b2"},
+  c2_b2:{type:"dialogue", speaker:"林夏", text:"！……当、当然记得啊。你帮过我捡书嘛。", next:"c2_b3"},
+  c2_b3:{type:"narration", text:"她没有说的是——这一周里，她去了知更鸟书店四次，希望再遇见你。", next:"c2_after"},
+  c2_after:{type:"narration", text:"雨声很大。便利店的暖气"呼呼"地吹着。", next:"c2_9"},
+  c2_9:{type:"dialogue", speaker:"林夏", text:"你要不要……喝点热的？我请客。", next:"c2_10"},
+  c2_10:{type:"narration", text:"她说完又后悔了，赶紧补一句——", next:"c2_11"},
+  c2_11:{type:"dialogue", speaker:"林夏", text:"就是、就是店里有微波炉热牛奶，不要钱的，员工福利那种……", next:"c2_choice2"},
+  c2_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"好啊，那我就不客气了", next:"c2_c1"},
+      {text:"怎么能让你请，我自己买", next:"c2_d1"},
+      {text:"你帮我热，我请你", next:"c2_d1"}
+    ]
+  },
+  c2_c1:{type:"dialogue", speaker:"你", text:"好啊，那我就不客气了。", next:"c2_c2"},
+  c2_c2:{type:"dialogue", speaker:"林夏", text:"嗯！你坐、坐那边，等一下。", next:"c2_after2"},
+  c2_d1:{type:"dialogue", speaker:"你", text:"怎么能让你请，我自己买。", next:"c2_d2"},
+  c2_d2:{type:"dialogue", speaker:"林夏", text:"啊……那、那也行。", next:"c2_d3"},
+  c2_d3:{type:"narration", text:"她有点失落，但很快又笑了——毕竟你愿意留下来，已经够她开心一整晚了。", next:"c2_after2"},
+  c2_after2:{type:"narration", text:"她去热牛奶的时候，偷偷回头看了你三次。", next:"c2_12"},
+  c2_12:{type:"narration", text:"你们坐在便利店窗边的高脚凳上，看雨砸在玻璃上。", next:"c2_13"},
+  c2_13:{type:"dialogue", speaker:"林夏", text:"雨好大。", next:"c2_14"},
+  c2_14:{type:"dialogue", speaker:"林夏", text:"……你住附近吗？", next:"c2_choice3"},
+  c2_choice3:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"不远，过两条街", next:"c2_e1"},
+      {text:"有点远，今天回不去了", next:"c2_e2"},
+      {text:"你呢？你住哪里？", next:"c2_f1"}
+    ]
+  },
+  c2_e1:{type:"dialogue", speaker:"你", text:"不远，过两条街。", next:"c2_e3"},
+  c2_e3:{type:"dialogue", speaker:"林夏", text:"那就好……我、我还怕你没伞回不去。", next:"c2_after3"},
+  c2_e2:{type:"dialogue", speaker:"你", text:"有点远，今天大概回不去了。", next:"c2_e4"},
+  c2_e4:{type:"dialogue", speaker:"林夏", text:"那、那你等等！", next:"c2_e5"},
+  c2_e5:{type:"narration", text:"她跑到柜台下面翻找，翻出一把透明雨伞，伞面上印着小鸭子。", next:"c2_e6"},
+  c2_e6:{type:"dialogue", speaker:"林夏", text:"这把……这把给你。我备用伞。", next:"c2_after3"},
+  c2_f1:{type:"dialogue", speaker:"你", text:"你呢？你住哪里？", next:"c2_f2"},
+  c2_f2:{type:"dialogue", speaker:"林夏", text:"我？我、我住得挺近的，十分钟……", next:"c2_f3"},
+  c2_f3:{type:"narration", text:"其实是二十二分钟。她算快了，怕你觉得远。", next:"c2_after3"},
+  c2_after3:{type:"dialogue", speaker:"林夏", text:"其实……我下周六还会去知更鸟。", next:"c2_15"},
+  c2_15:{type:"dialogue", speaker:"林夏", text:"就是、就是顺便告诉你一下。", next:"c2_16"},
+  c2_16:{type:"narration", text:"她说"顺便"两个字的时候，手指在围裙上攥紧了。", next:"c2_17"},
+  c2_17:{type:"dialogue", speaker:"林夏", text:"如果你……如果你也去的话。", next:"c2_18"},
+  c2_18:{type:"narration", text:"雨小了一些。你撑着她给的鸭子伞，走进夜色里。", next:"c2_19"},
+  c2_19:{type:"narration", text:"回头看时，便利店的灯还亮着。她站在玻璃后面，正看着你的方向。", next:"c2_20"},
+  c2_20:{type:"narration", text:"——她没有发现，自己已经在玻璃上，用手指画了一颗小小的心。", next:"c3_1"},
+
+  // ===== 第三章：咖啡馆的兼职 =====
+  c3_1:{
+    chapter:"第三章 · 名叫"半糖"的咖啡馆",
+    type:"narration",
+    text:"你常去一家叫"半糖"的咖啡馆写东西。店不大，二楼有张靠窗的桌子是你的专属。",
+    next:"c3_2"
+  },
+  c3_2:{type:"narration", text:"那个周六下午，你推开门，风铃还没响完——", next:"c3_3"},
+  c3_3:{type:"dialogue", speaker:"林夏", text:"欢迎光临——", next:"c3_4"},
+  c3_4:{type:"narration", text:"她站在吧台后面，系着一条深棕色的围裙。看见是你，手里的抹布停在半空。", next:"c3_5"},
+  c3_5:{type:"dialogue", speaker:"林夏", text:"……诶。", next:"c3_6"},
+  c3_6:{type:"dialogue", speaker:"你", text:"你怎么在这里？", next:"c3_7"},
+  c3_7:{type:"dialogue", speaker:"林夏", text:"我、我在这里兼职……周二周四周六，便利店是周一三五……", next:"c3_8"},
+  c3_8:{type:"narration", text:"她数着手指，越说越不好意思。", next:"c3_9"},
+  c3_9:{type:"dialogue", speaker:"林夏", text:"总之、总之我很缺钱啦。", next:"c3_choice"},
+  c3_choice:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"那以后我天天来，照顾你生意", next:"c3_a1"},
+      {text:"辛苦了，给我一杯拿铁", next:"c3_b1"},
+      {text:"你不用这么拼吧？", next:"c3_b1"}
+    ]
+  },
+  c3_a1:{type:"dialogue", speaker:"你", text:"那以后我天天来，照顾你生意。", next:"c3_a2"},
+  c3_a2:{type:"dialogue", speaker:"林夏", text:"！……你别、别为了这个专门来……", next:"c3_a3"},
+  c3_a3:{type:"narration", text:"她嘴上这么说，嘴角却压不住地翘起来。", next:"c3_after"},
+  c3_b1:{type:"dialogue", speaker:"你", text:"辛苦了。给我一杯拿铁。", next:"c3_b2"},
+  c3_b2:{type:"dialogue", speaker:"林夏", text:"好的！冰的还是热的？", next:"c3_b3"},
+  c3_b3:{type:"narration", text:"她做咖啡的时候，偷偷多加了一点奶泡——她记得你说过的，喜欢绵密一点的口感。", next:"c3_after"},
+  c3_after:{type:"narration", text:"你上了二楼，靠窗的位置。她端着咖啡上来时，脚步轻得像怕踩碎什么。", next:"c3_10"},
+  c3_10:{type:"dialogue", speaker:"林夏", text:"你的拿铁。", next:"c3_11"},
+  c3_11:{type:"narration", text:"杯子下面压着一张小纸条。", next:"c3_12"},
+  c3_12:{type:"narration", text:"纸条上写着：「今天的拿铁是我做的，奶泡多一点，希望你喜欢。——林夏」", next:"c3_13"},
+  c3_13:{type:"narration", text:"下面还有一行更小的字，像是写了又擦掉、又重新写的：「你来了，真好。」", next:"c3_choice2"},
+  c3_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"冲楼下喊：奶泡很好喝", next:"c3_c1"},
+      {text:"在纸条背面写：谢谢，明天还来", next:"c3_d1"},
+      {text:"什么都没写，把纸条收进口袋", next:"c3_e1"}
+    ]
+  },
+  c3_c1:{type:"dialogue", speaker:"你", text:"（冲楼下喊）奶泡很好喝！", next:"c3_c2"},
+  c3_c2:{type:"narration", text:"楼下没有回应。但你听见"哐当"一声——像是有人撞到了吧台。", next:"c3_c3"},
+  c3_c3:{type:"narration", text:"一分钟后，她又上来了一趟，假装整理隔壁桌。耳朵通红。", next:"c3_after2"},
+  c3_d1:{type:"dialogue", speaker:"你", text:"（在纸条背面写：谢谢，明天还来）", next:"c3_d2"},
+  c3_d2:{type:"narration", text:"你把纸条留在桌上。下楼时，她假装在擦杯子，眼睛却一直往楼梯方向瞟。", next:"c3_d3"},
+  c3_d3:{type:"narration", text:"你走后，她拿起那张纸条，看了七遍。", next:"c3_after2"},
+  c3_e1:{type:"dialogue", speaker:"你", text:"（把纸条收进口袋，什么都没写）", next:"c3_e2"},
+  c3_e2:{type:"narration", text:"她上楼收盘子时，发现纸条不见了，愣了好一会儿。然后，她笑了一下。", next:"c3_after2"},
+  c3_after2:{type:"narration", text:"从那天起，你成了半糖咖啡馆的常客。", next:"c3_14"},
+  c3_14:{type:"narration", text:"每天下午三点，你的拿铁会准时出现在二楼靠窗的桌上。", next:"c3_15"},
+  c3_15:{type:"narration", text:"杯底永远压着一张小纸条。有时候是一句诗，有时候是天气，有时候只是一个笑脸。", next:"c3_16"},
+  c3_16:{type:"narration", text:"你从来没有问过她为什么。她也从来没有说过。", next:"c4_1"},
+
+  // ===== 第四章：失物 =====
+  c4_1:{
+    chapter:"第四章 · 一本掉落的笔记本",
+    type:"narration",
+    text:"又是一个周六。她在二楼收拾桌子时，从围裙口袋里掉出一个巴掌大的本子。",
+    next:"c4_2"
+  },
+  c4_2:{type:"narration", text:"她没注意，端着盘子下了楼。", next:"c4_3"},
+  c4_3:{type:"narration", text:"你捡起来，本子是浅粉色的，封面上画着一只知更鸟。", next:"c4_choice"},
+  c4_choice:{
+    type:"dialogue", speaker:"你",
+    text:"（要不要翻开看看？）",
+    choices:[
+      {text:"翻开看看", next:"c4_a1"},
+      {text:"不翻，直接还给她", next:"c4_b1"}
+    ]
+  },
+  c4_b1:{type:"dialogue", speaker:"你", text:"（不翻，直接还给她）", next:"c4_b2"},
+  c4_b2:{type:"narration", text:"你把本子放在吧台上。她看见的瞬间，脸"刷"地白了。", next:"c4_b3"},
+  c4_b3:{type:"dialogue", speaker:"林夏", text:"你、你没看吧？", next:"c4_b4"},
+  c4_b4:{type:"dialogue", speaker:"你", text:"没看。", next:"c4_b5"},
+  c4_b5:{type:"dialogue", speaker:"林夏", text:"……呼。", next:"c4_b6"},
+  c4_b6:{type:"narration", text:"她松了一大口气。但紧跟着，又有一点点失落，从她眼睛里一闪而过。", next:"c4_after"},
+  c4_a1:{type:"narration", text:"你翻开第一页。", next:"c4_a2"},
+  c4_a2:{type:"narration", text:"上面是她清秀的字：「三月九日。今天在知更鸟书店，遇到了一个人。」", next:"c4_a3"},
+  c4_a3:{type:"narration", text:"「他帮我捡了书。他的手很好看。」", next:"c4_a4"},
+  c4_a4:{type:"narration", text:"「我的心跳到现在还没停下来。这是怎么回事？」", next:"c4_a5"},
+  c4_a5:{type:"narration", text:"你往后翻。每一页都是你。", next:"c4_a6"},
+  c4_a6:{type:"narration", text:"「三月十六日。雨。他来便利店避雨了。我把备用伞给了他。那把伞上有小鸭子，希望他不嫌弃。」", next:"c4_a7"},
+  c4_a7:{type:"narration", text:"「三月二十三日。他来咖啡馆了。我做了拿铁。他喝了一口，没有皱眉。我开心了一整天。」", next:"c4_a8"},
+  c4_a8:{type:"narration", text:"「四月。每天下午三点，他都会来。我开始期待三点钟。」", next:"c4_a9"},
+  c4_a9:{type:"narration", text:"「四月十八日。今天他冲我笑了一下。我要把这个笑容，存起来，存很久很久。」", next:"c4_a10"},
+  c4_a10:{type:"narration", text:"最后一页，只写了一行字：「我喜欢他。但他大概不知道吧。」", next:"c4_a11"},
+  c4_a11:{type:"narration", text:"你合上本子。心跳得有点快。", next:"c4_after"},
+  c4_after:{type:"narration", text:"你把本子还给她的时候，她的手在发抖。", next:"c4_4"},
+  c4_4:{type:"dialogue", speaker:"林夏", text:"谢、谢谢……", next:"c4_5"},
+  c4_5:{type:"dialogue", speaker:"林夏", text:"那个本子……就是、就是记记账的，没什么好看的……", next:"c4_6"},
+  c4_6:{type:"narration", text:"她不敢看你的眼睛。", next:"c4_choice2"},
+  c4_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"记账记得挺有诗意的", next:"c4_c1"},
+      {text:"什么都没说，只是笑了笑", next:"c4_d1"},
+      {text:"你写得很好", next:"c4_c1"}
+    ]
+  },
+  c4_c1:{type:"dialogue", speaker:"你", text:"记账记得挺有诗意的。", next:"c4_c2"},
+  c4_c2:{type:"dialogue", speaker:"林夏", text:"……！", next:"c4_c3"},
+  c4_c3:{type:"narration", text:"她猛地抬头，又猛地低下。脸红得像要烧起来。", next:"c4_after2"},
+  c4_d1:{type:"narration", text:"你什么都没说，只是笑了笑。她愣愣地看着你笑，手里的本子掉在了地上。", next:"c4_after2"},
+  c4_after2:{type:"narration", text:"那天之后，她变得有点奇怪。", next:"c4_7"},
+  c4_7:{type:"narration", text:"她依然每天下午三点送来拿铁，依然压着纸条。", next:"c4_8"},
+  c4_8:{type:"narration", text:"但纸条上的字，开始变得小心翼翼。", next:"c4_9"},
+  c4_9:{type:"narration", text:"「今天天气很好。」", next:"c4_10"},
+  c4_10:{type:"narration", text:"「奶泡还是多一点。」", next:"c4_11"},
+  c4_11:{type:"narration", text:"「希望你今天也开心。」", next:"c4_12"},
+  c4_12:{type:"narration", text:"——她不再写那些"我喜欢他"之类的话了。她怕你看到了，又怕你没看到。", next:"c5_1"},
+
+  // ===== 第五章：共伞 =====
+  c5_1:{
+    chapter:"第五章 · 又是雨天",
+    type:"narration",
+    text:"五月的一个傍晚，又是雨。咖啡馆打烊的时候，你和她一起被关在了门廊下。",
+    next:"c5_2"
+  },
+  c5_2:{type:"narration", text:"雨很大，大到看不清对面的街道。", next:"c5_3"},
+  c5_3:{type:"dialogue", speaker:"林夏", text:"你没带伞啊？", next:"c5_4"},
+  c5_4:{type:"dialogue", speaker:"你", text:"嗯，没想到下雨。", next:"c5_5"},
+  c5_5:{type:"dialogue", speaker:"林夏", text:"我、我带了。", next:"c5_6"},
+  c5_6:{type:"narration", text:"她从包里掏出一把伞。深蓝色的，长柄，看起来很新。", next:"c5_7"},
+  c5_7:{type:"dialogue", speaker:"林夏", text:"我们……顺路吗？", next:"c5_choice"},
+  c5_choice:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"顺路，一起走吧", next:"c5_a1"},
+      {text:"你先走吧，我等等雨停", next:"c5_b1"},
+      {text:"你不嫌我麻烦的话", next:"c5_a1"}
+    ]
+  },
+  c5_b1:{type:"dialogue", speaker:"你", text:"你先走吧，我等雨停。", next:"c5_b2"},
+  c5_b2:{type:"dialogue", speaker:"林夏", text:"……", next:"c5_b3"},
+  c5_b3:{type:"narration", text:"她沉默了两秒，然后把伞塞到你手里，自己冲进了雨里。", next:"c5_b4"},
+  c5_b4:{type:"dialogue", speaker:"你", text:"喂——！", next:"c5_b5"},
+  c5_b5:{type:"narration", text:"你撑着伞追了上去。她在雨里跑，一边跑一边回头，眼睛亮亮的。", next:"c5_b6"},
+  c5_b6:{type:"dialogue", speaker:"林夏", text:"你来追我呀！", next:"c5_a2"},
+  c5_a1:{type:"dialogue", speaker:"你", text:"顺路，一起走吧。", next:"c5_a2"},
+  c5_a2:{type:"narration", text:"她"嗯"了一声，把伞举高了一些，往你这边倾斜。", next:"c5_8"},
+  c5_8:{type:"narration", text:"伞不大，两个人靠得很近。你能闻到她身上淡淡的、像刚洗过的衣服的味道。", next:"c5_9"},
+  c5_9:{type:"narration", text:"她的左肩，悄悄地，一点一点地，被雨淋湿了。但她没有把伞往自己这边移。", next:"c5_10"},
+  c5_10:{type:"dialogue", speaker:"林夏", text:"……", next:"c5_11"},
+  c5_11:{type:"dialogue", speaker:"林夏", text:"你有没有觉得，雨声其实挺好听的？", next:"c5_choice2"},
+  c5_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"嗯，尤其是和你一起走的时候", next:"c5_c1"},
+      {text:"还行吧，就是有点吵", next:"c5_d1"},
+      {text:"你肩膀湿了", next:"c5_e1"}
+    ]
+  },
+  c5_c1:{type:"dialogue", speaker:"你", text:"嗯，尤其是和你一起走的时候。", next:"c5_c2"},
+  c5_c2:{type:"narration", text:"她没说话。但伞下的沉默，比任何话都暖。", next:"c5_after"},
+  c5_d1:{type:"dialogue", speaker:"你", text:"还行吧，就是有点吵。", next:"c5_d2"},
+  c5_d2:{type:"dialogue", speaker:"林夏", text:"……嗯。", next:"c5_d3"},
+  c5_d3:{type:"narration", text:"她"嗯"得很轻。过了一会儿，她小声说——", next:"c5_d4"},
+  c5_d4:{type:"dialogue", speaker:"林夏", text:"但我觉得……今天不吵。", next:"c5_after"},
+  c5_e1:{type:"dialogue", speaker:"你", text:"你肩膀湿了。", next:"c5_e2"},
+  c5_e2:{type:"dialogue", speaker:"林夏", text:"啊？没、没有啦。", next:"c5_e3"},
+  c5_e3:{type:"narration", text:"你伸手把伞往她那边推了推。她的手背，碰到了你的手指。", next:"c5_e4"},
+  c5_e4:{type:"narration", text:"两个人都僵了一下。然后都没有收回去。", next:"c5_after"},
+  c5_after:{type:"narration", text:"走到她家楼下时，雨停了。", next:"c5_12"},
+  c5_12:{type:"dialogue", speaker:"林夏", text:"我到了。", next:"c5_13"},
+  c5_13:{type:"dialogue", speaker:"林夏", text:"……谢谢你送我。", next:"c5_14"},
+  c5_14:{type:"narration", text:"她站在单元门口，仰头看你，像是有话要说。", next:"c5_15"},
+  c5_15:{type:"dialogue", speaker:"林夏", text:"那个……", next:"c5_16"},
+  c5_16:{type:"dialogue", speaker:"林夏", text:"你……你有没有想过，", next:"c5_17"},
+  c5_17:{type:"dialogue", speaker:"林夏", text:"就是、就是假设……", next:"c5_18"},
+  c5_18:{type:"narration", text:"她说了半天，最后只憋出一句——", next:"c5_19"},
+  c5_19:{type:"dialogue", speaker:"林夏", text:"明天见。", next:"c5_20"},
+  c5_20:{type:"narration", text:"然后她逃进了楼道。灯一盏一盏亮起来，停在五楼。", next:"c5_21"},
+  c5_21:{type:"narration", text:"你站在原地，忽然明白了什么。", next:"c6_1"},
+
+  // ===== 第六章：深夜电话 =====
+  c6_1:{
+    chapter:"第六章 · 凌晨两点的电话",
+    type:"narration",
+    text:"那之后的第三天，凌晨两点，你的手机响了。是林夏。",
+    next:"c6_2"
+  },
+  c6_2:{type:"narration", text:"你接起来，那边没有声音。", next:"c6_3"},
+  c6_3:{type:"dialogue", speaker:"你", text:"喂？", next:"c6_4"},
+  c6_4:{type:"dialogue", speaker:"林夏", text:"……你还没睡啊。", next:"c6_5"},
+  c6_5:{type:"dialogue", speaker:"你", text:"是你打给我的。", next:"c6_6"},
+  c6_6:{type:"dialogue", speaker:"林夏", text:"对哦。", next:"c6_7"},
+  c6_7:{type:"narration", text:"电话那头，她轻轻笑了一下，又像是哭了一下。", next:"c6_choice"},
+  c6_choice:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"你怎么了？发生什么事了？", next:"c6_a1"},
+      {text:"睡不着吗？", next:"c6_b1"},
+      {text:"我过来找你？", next:"c6_c1"}
+    ]
+  },
+  c6_a1:{type:"dialogue", speaker:"你", text:"你怎么了？发生什么事了？", next:"c6_a2"},
+  c6_a2:{type:"dialogue", speaker:"林夏", text:"没、没事。就是……", next:"c6_after"},
+  c6_b1:{type:"dialogue", speaker:"你", text:"睡不着吗？", next:"c6_b2"},
+  c6_b2:{type:"dialogue", speaker:"林夏", text:"嗯。脑子很乱。", next:"c6_after"},
+  c6_c1:{type:"dialogue", speaker:"你", text:"我过来找你？", next:"c6_c2"},
+  c6_c2:{type:"dialogue", speaker:"林夏", text:"不、不用！你别来，我没事的，真的。", next:"c6_c3"},
+  c6_c3:{type:"narration", text:"她急得语无伦次，但你听见她那边压抑的呼吸。", next:"c6_after"},
+  c6_after:{type:"dialogue", speaker:"林夏", text:"我只是……想听听你的声音。", next:"c6_8"},
+  c6_8:{type:"dialogue", speaker:"林夏", text:"这样可以吗？", next:"c6_9"},
+  c6_9:{type:"narration", text:"她的声音小得像怕被拒绝。", next:"c6_choice2"},
+  c6_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"可以。我陪你。", next:"c6_d1"},
+      {text:"你睡不着我陪你聊到天亮", next:"c6_d1"},
+      {text:"你平时也这样睡不着吗？", next:"c6_e1"}
+    ]
+  },
+  c6_e1:{type:"dialogue", speaker:"你", text:"你平时也这样睡不着吗？", next:"c6_e2"},
+  c6_e2:{type:"dialogue", speaker:"林夏", text:"……不会。只有想到你的时候会。", next:"c6_e3"},
+  c6_e3:{type:"narration", text:"她说完，自己愣住了——大概没想到会这么说出口。", next:"c6_d1"},
+  c6_d1:{type:"dialogue", speaker:"你", text:"可以。我陪你。", next:"c6_10"},
+  c6_10:{type:"narration", text:"电话那头沉默了一会儿。", next:"c6_11"},
+  c6_11:{type:"dialogue", speaker:"林夏", text:"……谢谢。", next:"c6_12"},
+  c6_12:{type:"narration", text:"你们没有说什么。她那边的呼吸，一点一点地，变均匀了。", next:"c6_13"},
+  c6_13:{type:"narration", text:"凌晨三点四十分，她小声说了一句——", next:"c6_14"},
+  c6_14:{type:"dialogue", speaker:"林夏", text:"晚安。", next:"c6_15"},
+  c6_15:{type:"dialogue", speaker:"林夏", text:"……明天见。", next:"c6_16"},
+  c6_16:{type:"narration", text:"电话挂断。你看着天花板，忽然觉得这间屋子空荡荡的。", next:"c6_17"},
+  c6_17:{type:"narration", text:"你想起她笔记本里那句话：「我喜欢他。但他大概不知道吧。」", next:"c6_18"},
+  c6_18:{type:"narration", text:"——其实，早就知道了。", next:"c7_1"},
+
+  // ===== 第七章：她生病了 =====
+  c7_1:{
+    chapter:"第七章 · 她没有来",
+    type:"narration",
+    text:"第二天下午三点，你的桌上没有拿铁。她没有来。",
+    next:"c7_2"
+  },
+  c7_2:{type:"narration", text:"你问了老板，老板说她请了病假。", next:"c7_3"},
+  c7_3:{type:"narration", text:"你站在咖啡馆门口，犹豫了很久。", next:"c7_choice"},
+  c7_choice:{
+    type:"dialogue", speaker:"你",
+    text:"（要不要去看看她？）",
+    choices:[
+      {text:"去。买点粥和药", next:"c7_a1"},
+      {text:"发个消息问她怎么样", next:"c7_b1"},
+      {text:"不打扰她休息", next:"c7_c1"}
+    ]
+  },
+  c7_c1:{type:"narration", text:"你忍住了没去。但整个下午，你一杯咖啡都没喝完。", next:"c7_c2"},
+  c7_c2:{type:"narration", text:"晚上八点，你终于还是出现在了她家楼下。手里提着粥和药。", next:"c7_a1"},
+  c7_b1:{type:"dialogue", speaker:"你", text:"（发消息：听说你病了，没事吧？）", next:"c7_b2"},
+  c7_b2:{type:"narration", text:"十分钟后，她回了一个字：「嗯。」", next:"c7_b3"},
+  c7_b3:{type:"narration", text:"——她平时回你消息至少三行。你立刻出了门。", next:"c7_a1"},
+  c7_a1:{type:"narration", text:"你按了五楼的门铃。过了很久，门"咔哒"开了。", next:"c7_a2"},
+  c7_a2:{type:"narration", text:"她裹着被子开门的样子，让你有点想笑，又有点心疼。", next:"c7_a3"},
+  c7_a3:{type:"dialogue", speaker:"林夏", text:"你、你怎么来了……", next:"c7_a4"},
+  c7_a4:{type:"dialogue", speaker:"林夏", text:"我没化妆、头发也没洗、屋子也乱……你、你别进来——", next:"c7_a5"},
+  c7_a5:{type:"dialogue", speaker:"你", text:"让开，粥要凉了。", next:"c7_a6"},
+  c7_a6:{type:"narration", text:"你径直走进了她的小公寓。", next:"c7_a7"},
+  c7_a7:{type:"narration", text:"屋子很小，但很整洁。桌上摊着一本翻开的书，旁边是她那个粉色笔记本。", next:"c7_a8"},
+  c7_a8:{type:"narration", text:"你把粥热好，把药放在她手边。", next:"c7_a9"},
+  c7_a9:{type:"dialogue", speaker:"林夏", text:"……谢谢。", next:"c7_a10"},
+  c7_a10:{type:"narration", text:"她喝粥的时候偷偷看你，被你撞见了就低头，再偷偷抬眼。", next:"c7_choice2"},
+  c7_choice2:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"你看我干嘛？", next:"c7_d1"},
+      {text:"好好喝粥，喝完吃药", next:"c7_e1"},
+      {text:"……你脸好红，是不是发烧严重了？", next:"c7_f1"}
+    ]
+  },
+  c7_d1:{type:"dialogue", speaker:"你", text:"你看我干嘛？", next:"c7_d2"},
+  c7_d2:{type:"dialogue", speaker:"林夏", text:"我没看你！我看……看墙！", next:"c7_d3"},
+  c7_d3:{type:"narration", text:"她真的扭头去看墙了。墙是白的，什么都没有。", next:"c7_after"},
+  c7_e1:{type:"dialogue", speaker:"你", text:"好好喝粥，喝完吃药。", next:"c7_e2"},
+  c7_e2:{type:"dialogue", speaker:"林夏", text:"……你好像我妈妈。", next:"c7_e3"},
+  c7_e3:{type:"narration", text:"她说完自己也笑了，笑到一半又咳嗽起来。", next:"c7_after"},
+  c7_f1:{type:"dialogue", speaker:"你", text:"……你脸好红，是不是发烧严重了？", next:"c7_f2"},
+  c7_f2:{type:"dialogue", speaker:"林夏", text:"！……没、没有，是粥太烫了。", next:"c7_f3"},
+  c7_f3:{type:"narration", text:"粥是温的。她自己也知道。", next:"c7_after"},
+  c7_after:{type:"narration", text:"你坐在她床边，看着她把药吃了，把被子掖好。", next:"c7_a11"},
+  c7_a11:{type:"dialogue", speaker:"林夏", text:"你……要走了吗？", next:"c7_a12"},
+  c7_a12:{type:"narration", text:"她问这句话的时候，声音里有藏不住的紧张。", next:"c7_choice3"},
+  c7_choice3:{
+    type:"dialogue", speaker:"你",
+    choices:[
+      {text:"再陪你一会儿", next:"c7_g1"},
+      {text:"你睡了我再走", next:"c7_g1"},
+      {text:"嗯，你好好休息", next:"c7_h1"}
+    ]
+  },
+  c7_g1:{type:"dialogue", speaker:"你", text:"再陪你一会儿。", next:"c7_g2"},
+  c7_g2:{type:"dialogue", speaker:"林夏", text:"……嗯。", next:"c7_g3"},
+  c7_g3:{type:"narration", text:"她往床里挪了挪，给你让出了一小块地方。她没有让你坐，但她让了。", next:"c7_after2"},
+  c7_h1:{type:"dialogue", speaker:"你", text:"嗯，你好好休息。", next:"c7_h2"},
+  c7_h2:{type:"dialogue", speaker:"林夏", text:"……嗯。", next:"c7_h3"},
+  c7_h3:{type:"narration", text:"你走到门口，回头看她。她抱着被子，眼睛红红的——不是发烧，是别的。", next:"c7_h4"},
+  c7_h4:{type:"narration", text:"你又走了回来，坐在床边。她"哇"地一声，把脸埋进了被子。", next:"c7_after2"},
+  c7_after2:{type:"narration", text:"窗外的天，一点一点地暗下来，又一点一点地亮起来。", next:"c7_a13"},
+  c7_a13:{type:"narration", text:"你们谁都没有说话。但她睡着了之后，手一直攥着你的衣角。", next:"c7_a14"},
+  c7_a14:{type:"narration", text:"——攥得很紧，像是怕一松手，你就会消失。", next:"c8_1"},
+
+  // ===== 第八章：告白 =====
+  c8_1:{
+    chapter:"第八章 · 知更鸟书店，春天",
+    type:"narration",
+    text:"六月，知更鸟书店要拆了。最后一天，老板办了一场小小的告别会。",
+    next:"c8_2"
+  },
+  c8_2:{type:"narration", text:"你去了。她也去了。", next:"c8_3"},
+  c8_3:{type:"narration", text:"她穿了一条浅色的连衣裙，头发别在耳后。她没有看见你。", next:"c8_4"},
+  c8_4:{type:"narration", text:"她站在那个书架前——三个月前，你们第一次遇见的那个书架前。", next:"c8_5"},
+  c8_5:{type:"narration", text:"她踮起脚，去够最高一层的《博尔赫斯诗集》。", next:"c8_6"},
+  c8_6:{type:"narration", text:"——和那天一模一样。", next:"c8_7"},
+  c8_7:{type:"narration", text:"你走过去，从她身后，把那本书取了下来。", next:"c8_8"},
+  c8_8:{type:"dialogue", speaker:"林夏", text:"……！", next:"c8_9"},
+  c8_9:{type:"narration", text:"她回过头，眼眶一下子就红了。", next:"c8_10"},
+  c8_10:{type:"dialogue", speaker:"林夏", text:"你来了。", next:"c8_11"},
+  c8_11:{type:"dialogue", speaker:"你", text:"嗯。", next:"c8_12"},
+  c8_12:{type:"narration", text:"她接过书，抱在怀里，低着头不说话。", next:"c8_13"},
+  c8_13:{type:"dialogue", speaker:"林夏", text:"这家店要没了。", next:"c8_14"},
+  c8_14:{type:"dialogue", speaker:"你", text:"嗯。", next:"c8_15"},
+  c8_15:{type:"dialogue", speaker:"林夏", text:"……我有点舍不得。", next:"c8_16"},
+  c8_16:{type:"narration", text:"她说的不只是书店。", next:"c8_choice"},
+  c8_choice:{
+    type:"dialogue", speaker:"你",
+    text:"（你看着她低垂的眼睛，听见了自己的心跳。）",
+    choices:[
+      {text:"林夏，我有话跟你说", next:"c8_a1"},
+      {text:"其实，我读过你的笔记本", next:"c8_b1"},
+      {text:"我喜欢你", next:"c8_c1"}
+    ]
+  },
+  c8_b1:{type:"dialogue", speaker:"你", text:"其实，我读过你的笔记本。", next:"c8_b2"},
+  c8_b2:{type:"narration", text:"她的脸瞬间白了，又瞬间红了。", next:"c8_b3"},
+  c8_b3:{type:"dialogue", speaker:"林夏", text:"你……你什么时候……", next:"c8_b4"},
+  c8_b4:{type:"dialogue", speaker:"你", text:"那天你掉在地上的时候。", next:"c8_b5"},
+  c8_b5:{type:"dialogue", speaker:"林夏", text:"……那你都知道了？", next:"c8_b6"},
+  c8_b6:{type:"dialogue", speaker:"你", text:"嗯。", next:"c8_b7"},
+  c8_b7:{type:"dialogue", speaker:"林夏", text:"……", next:"c8_b8"},
+  c8_b8:{type:"narration", text:"她抱着书，肩膀微微发抖。", next:"c8_b9"},
+  c8_b9:{type:"dialogue", speaker:"林夏", text:"那你……为什么不早说……", next:"c8_b10"},
+  c8_b10:{type:"dialogue", speaker:"你", text:"因为我想等你自己说。", next:"c8_b11"},
+  c8_b11:{type:"narration", text:"她抬起头，眼泪一颗一颗地掉下来。", next:"c8_c1"},
+  c8_a1:{type:"dialogue", speaker:"你", text:"林夏，我有话跟你说。", next:"c8_a2"},
+  c8_a2:{type:"dialogue", speaker:"林夏", text:"……你说。", next:"c8_a3"},
+  c8_a3:{type:"dialogue", speaker:"你", text:"其实我早就知道了。", next:"c8_a4"},
+  c8_a4:{type:"dialogue", speaker:"林夏", text:"诶？", next:"c8_a5"},
+  c8_a5:{type:"dialogue", speaker:"你", text:"笔记本、奶泡、伞、凌晨两点的电话。", next:"c8_a6"},
+  c8_a6:{type:"narration", text:"她的眼睛越睁越大。", next:"c8_c1"},
+  c8_c1:{type:"dialogue", speaker:"你", text:"我喜欢你。", next:"c8_c2"},
+  c8_c2:{type:"narration", text:"三个字，落在书架之间，落在三月那本诗集之间。", next:"c8_c3"},
+  c8_c3:{type:"narration", text:"她愣了好久。然后她哭了。然后她笑了。", next:"c8_c4"},
+  c8_c4:{type:"dialogue", speaker:"林夏", text:"你……你骗我。", next:"c8_c5"},
+  c8_c5:{type:"dialogue", speaker:"你", text:"我没骗你。", next:"c8_c6"},
+  c8_c6:{type:"dialogue", speaker:"林夏", text:"你怎么会……我哪里好……", next:"c8_c7"},
+  c8_c7:{type:"dialogue", speaker:"你", text:"你踮脚够书的样子。", next:"c8_c8"},
+  c8_c8:{type:"dialogue", speaker:"林夏", text:"……", next:"c8_c9"},
+  c8_c9:{type:"dialogue", speaker:"你", text:"你做奶泡的样子。", next:"c8_c10"},
+  c8_c10:{type:"dialogue", speaker:"林夏", text:"……", next:"c8_c11"},
+  c8_c11:{type:"dialogue", speaker:"你", text:"你把伞往我这边倾的样子。", next:"c8_c12"},
+  c8_c12:{type:"dialogue", speaker:"林夏", text:"你别说了……", next:"c8_c13"},
+  c8_c13:{type:"dialogue", speaker:"你", text:"你凌晨两点打给我，又不敢说话的样子。", next:"c8_c14"},
+  c8_c14:{type:"dialogue", speaker:"林夏", text:"呜……", next:"c8_c15"},
+  c8_c15:{type:"narration", text:"她终于绷不住了，扑进你怀里，把脸埋在你衬衫上。", next:"c8_c16"},
+  c8_c16:{type:"dialogue", speaker:"林夏", text:"我以为你不知道。", next:"c8_c17"},
+  c8_c17:{type:"dialogue", speaker:"林夏", text:"我以为我藏得很好。", next:"c8_c18"},
+  c8_c18:{type:"dialogue", speaker:"林夏", text:"我以为……你不会喜欢我这种人。", next:"c8_c19"},
+  c8_c19:{type:"dialogue", speaker:"你", text:"你这种人，是怎样的人？", next:"c8_c20"},
+  c8_c20:{type:"dialogue", speaker:"林夏", text:"就是……就是会偷偷喜欢一个人，喜欢到睡不着，喜欢到写满一整本笔记本的人。", next:"c8_c21"},
+  c8_c21:{type:"dialogue", speaker:"你", text:"这种人，我也喜欢。", next:"c8_c22"},
+  c8_c22:{type:"narration", text:"她抬起头，鼻尖红红的，眼睛亮亮的。", next:"c8_c23"},
+  c8_c23:{type:"dialogue", speaker:"林夏", text:"……其实，我还有一句话没敢写进笔记本。", next:"c8_c24"},
+  c8_c24:{type:"dialogue", speaker:"你", text:"什么？", next:"c8_c25"},
+  c8_c25:{type:"dialogue", speaker:"林夏", text:"我喜欢你。", next:"c8_c26"},
+  c8_c26:{type:"dialogue", speaker:"林夏", text:"从你帮我捡起那本书开始。", next:"c8_c27"},
+  c8_c27:{type:"dialogue", speaker:"林夏", text:"到明天。", next:"c8_c28"},
+  c8_c28:{type:"dialogue", speaker:"林夏", text:"到以后的每一个明天。", next:"c8_c29"},
+  c8_c29:{type:"narration", text:"书店的风铃响了。像是替春天，做了一个总结。", next:"ending_good"}
+  ,
+
+  // ===== 结局 =====
+  ending_good:{
+    type:"ending",
+    title:"春 天 从 未 结 束",
+    text:"知更鸟书店拆掉的那一年，\n你们在一起了。\n\n她依然会踮脚够书架最高一层。\n只是现在，有人会替她取下来。\n\n她依然每天下午三点做拿铁。\n只是杯底的纸条上，多了三个字。\n\n那本粉色的笔记本，\n她写了第二本、第三本、第四本。\n每一页的第一行，都是同一个名字。\n\n——这是她藏了三个月的告白。\n也是你们，漫长而温柔的春天。"
+  }
+};
