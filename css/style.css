@@ -10,6 +10,54 @@
   --shadow:0 18px 50px -20px rgba(58,47,40,.35);
 }
 
+/* ---------- 过场动画 ---------- */
+#intro{
+  align-items:center;justify-content:center;
+  background: radial-gradient(circle at 50% 50%, #2b2222 0%, #161010 100%);
+  z-index: 100;
+}
+.intro-container{
+  text-align:center;
+  opacity: 0;
+  animation: introFadeIn 1.5s ease forwards;
+}
+.intro-main{
+  font-family:"Ma Shan Zheng",cursive;
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
+  color: #f7f1e8;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(217,138,150,0.3);
+}
+.intro-joke{
+  font-family:"Long Cang",cursive;
+  font-size: 1.2rem;
+  color: #d98a96;
+  margin-top: 1rem;
+  opacity: 0;
+  transform: rotate(-8deg) translateX(-20px);
+  animation: jokePop 0.6s 1.8s ease forwards;
+}
+
+/* 过场动画消失 */
+#intro.fade-out{
+  animation: introFadeOut 1.2s ease forwards;
+}
+
+@keyframes introFadeIn{
+  0%{opacity:0; transform: translateY(20px);}
+  100%{opacity:1; transform: translateY(0);}
+}
+@keyframes jokePop{
+  0%{opacity:0; transform: rotate(-15deg) scale(0.5);}
+  60%{opacity:1; transform: rotate(8deg) scale(1.2);}
+  100%{opacity:1; transform: rotate(-8deg) scale(1);}
+}
+@keyframes introFadeOut{
+  0%{opacity:1;}
+  100%{opacity:0; visibility:hidden;}
+}
+
+
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;}
 body{
